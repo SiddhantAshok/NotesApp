@@ -17,6 +17,8 @@ builder.Services.AddDbContext<NotesDBContext>(options =>
 
 var app = builder.Build();
 
+app.UseCors(policyOptions => policyOptions.WithOrigins("http://127.0.0.1:5500").AllowAnyHeader().AllowAnyMethod());
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
