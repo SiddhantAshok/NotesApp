@@ -1,7 +1,12 @@
 const saveButton = document.querySelector('#btnSave');
 const titleInput = document.querySelector('#title');
 const descriptionInput = document.querySelector('#description');
+const notesContainer = document.querySelector('#notes__container');
 
+function clearForm(){
+  titleInput.value = "";
+  descriptionInput.value = "";
+}
 
 function addNote(title, description){
 
@@ -19,9 +24,34 @@ function addNote(title, description){
     }
   })
   .then(data => data.json())
-  .then(response => console.log(response));
+  .then(response => {
+    clearForm();
+    getAllNotes();
+  });
 }
 
+function getAllNotes(){
+  fetch('https://localhost:7269/api/notes')
+  .then(data => data.json())
+  .then(response => displayNotes(response));
+}
+
+
+function displayNotes(notes){
+  let allNotes = '';
+  notes.forEach(note => {
+    const noteElement = `
+                          <div class="note">
+                            <h3>${note.title}</h3>
+                            <p>${note.description}</p>
+                          </div>
+                        `;
+    allNotes += noteElement;
+  });
+  notesContainer.innerHTML = allNotes;
+}
+
+getAllNotes();
 
 saveButton.addEventListener('click', function(){
   addNote(titleInput.value, descriptionInput.value);
